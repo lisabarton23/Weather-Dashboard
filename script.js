@@ -1,6 +1,6 @@
 //variables (global)
 var fetchButton = document.getElementById('fetchBtn'); //search button
-
+var weatherShow = document.getElementById ('weatherBox');
 // api.openweathermap.org/data/2.5/weather?q=[]&appid={4409982805e70fa40a6a29f20f0a6a35}
 var cityName = document.querySelector('cityName'); //use to save to local storage
 var responseText = document.getElementById('response-text');
@@ -69,12 +69,39 @@ function fiveDay(cityName){
          console.log(fiveObj.list[i*8].dt_txt)
          //icon
          console.log (fiveObj.list[i*8].weather[0].icon)
-         //temp
+         
          console.log (fiveObj.list[i*8].main.temp)
          //wind
          console.log (fiveObj.list[i*8].wind.speed)
          //hum
          console.log (fiveObj.list[i*8].main.humidity)
+
+         function showResults (resultObj) {
+            var resultIcon = document.createElement ('div');
+            resultIcon.classList.add ('card',);
+            var resultBody = document.createElement ('div');
+            resultBody.textContent =(fiveObj.list[i*8].main.temp) +
+            //wind
+             (fiveObj.list[i*8].wind.speed)+
+            //hum
+             (fiveObj.list[i*8].main.humidity);
+             weatherShow.append (resultBody);
+            
+            
+            
+            // resultBody.classList.add('card-body');
+            // resultBody.append.child (resultBody);
+            // var bodyContentEl = document.createElement ('p');
+            // bodyContentEl.innerHTML = (fiveObj.list[i*8].main.temp) +
+            // //wind
+            //  (fiveObj.list[i*8].wind.speed)+
+            // //hum
+            //  (fiveObj.list[i*8].main.humidity);
+            
+            // resultBody.append (bodyContentEl);
+            }
+            showResults ();
+
 
 
       }
@@ -82,7 +109,8 @@ function fiveDay(cityName){
    })
 
 
-}
+} 
+
 //fiveDay ("denver")
 //getAPi ("denver");
 //  .then(data => console.log(data));}
