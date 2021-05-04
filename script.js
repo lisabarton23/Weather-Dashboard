@@ -70,8 +70,11 @@ function fiveDay(cityName){
          //icon
          console.log (fiveObj.list[i*8].weather[0].icon)
          //temp
+         console.log (fiveObj.list[i*8].main.temp)
          //wind
+         console.log (fiveObj.list[i*8].wind.speed)
          //hum
+         console.log (fiveObj.list[i*8].main.humidity)
 
 
       }
@@ -100,7 +103,7 @@ function fiveDay(cityName){
 // event listners:
 //data needs to be cleared after saved to local storage so new city can be entered 
  document.querySelector(".fetchBtn").onclick = function(event){
-    event.preventdefault();
+   event.preventDefault();
     var cityName= document.querySelector("#cityName").value;
     getAPi(cityName);
     fiveDay(cityName)
