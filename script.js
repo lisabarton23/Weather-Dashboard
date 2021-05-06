@@ -5,6 +5,11 @@ var weatherfive = document.getElementById ('fivedayBox');
 // api.openweathermap.org/data/2.5/weather?q=[]&appid={4409982805e70fa40a6a29f20f0a6a35}
 var cityName = document.querySelector('cityName'); //use to save to local storage
 var responseText = document.getElementById('response-text');
+//default to nothing until there is something in ls
+var arrayCity=[]
+if( localStorage.getItem ("cityName")){
+   arrayCity=localStorage.getItem ("cityName");
+}
 
 //need to update url for cityName.. working on getApi()
 var requestURL ="http://api.openweathermap.org/data/2.5/weather?q=denver&appid=4409982805e70fa40a6a29f20f0a6a35";
@@ -72,6 +77,12 @@ function fiveDay(cityName){
          //icon
          // console.log (fiveObj.list[i*8].weather[0].icon)
          var icon5 = (fiveObj.list[i*8].weather[0].icon)
+         //<img src = icon5>
+         var image =document.createElement ('img');
+         //<img>
+         image.setAttribute("src","http://openweathermap.org/img/w/" + icon5 + ".png");
+         console.log(image)
+         //<img src="icon5">
          // console.log (fiveObj.list[i*8].main.temp)
          var temperature5 = (fiveObj.list[i*8].main.temp)
          //wind
@@ -81,19 +92,34 @@ function fiveDay(cityName){
          // console.log (fiveObj.list[i*8].main.humidity)
          var humidity5 = (fiveObj.list[i*8].main.humidity)
          
-         function showResults (resultObj) {
+        // function showResults (resultObj) {
             var resultIcon = document.createElement ('div');
             resultIcon.classList.add ('card',);
          
             var resultBody = document.createElement ('div');
-            resultBody.textContent = ("Temp:" + temperature5,   + "Winds:  " + wind5, + "Humidity:  " + humidity5);
-             weatherShow.append (resultBody);
+            resultBody.appendChild(image);
+
+            var ptemp=document.createElement("p");
+            ptemp.textContent="Temp: " + temperature5; 
+
+            //resultBody.textContent = "Temp: " + temperature5,   + "Winds:  " + wind5, + "Humidity:  " + humidity5;
+            resultBody.appendChild(ptemp);
+
+
+
+
+
+
+             weatherfive.appendChild(resultBody);
+        
+
+             console.log("fivedaydone");
             
              
             
             
-            }
-            showResults ();
+           // }
+           // showResults ();
 
 
 
@@ -104,15 +130,29 @@ function fiveDay(cityName){
 
 } 
 //local storage
-// function savecityname () {
-//    cityName : cityName.value,
-// localStorage.setItem ("cityName", JSON.stringify (cityName));
-// };
-// savecityname ()
+ function savecityname (cityName) {
+//cityName : cityName.value,
+//push the city into the array 
+arrayCity.push (cityName);
+//then set the array to ls
+localStorage.setItem ("cityName", JSON.stringify (arrayCity));
+ };
+ 
 
+function callcityname (){
+arrayCity= JSON.parse(localStorage.getItem ("cityName"));
+for(var i=0; i<arrayCity.length;i++){
+   console.log(arrayCity[i])
+   //make them into real btns
+   var btn=document.createElement("button");
+   btn.textContent= arrayCity[i]
+   document.querySelector(".searchHistory").appendChild(btn)
+}
 
-//fiveDay ("denver")
-//getAPi ("denver");
+}
+fiveDay ("denver")
+getAPi ("denver");
+callcityname();
 //  .then(data => console.log(data));}
  
 
@@ -135,6 +175,10 @@ function fiveDay(cityName){
     var cityName= document.querySelector("#cityName").value;
     getAPi(cityName);
     fiveDay(cityName)
+    savecityname (cityName);
+    //set item to local storage
+    //get all the items
+callcityname ();
  };
 
 
