@@ -12,7 +12,7 @@ if( localStorage.getItem ("cityName")){
 }
 
 //need to update url for cityName.. working on getApi()
-var requestURL ="http://api.openweathermap.org/data/2.5/weather?q=denver&appid=4409982805e70fa40a6a29f20f0a6a35";
+var requestURL ="https://api.openweathermap.org/data/2.5/weather?q=denver&appid=4409982805e70fa40a6a29f20f0a6a35";
 //?how can i make the city name a variable within the url?
 //functions 
 //TODO: create a fetch request to get weather info
@@ -22,7 +22,7 @@ var requestURL ="http://api.openweathermap.org/data/2.5/weather?q=denver&appid=4
 //TODO: name of city needs to be saved in local storage and appear in list under search button, this needs to be a link to recall fetch
 
 function getAPi (cityName){
-   var requestURL ="http://api.openweathermap.org/data/2.5/weather?q="+cityName+"&appid=4409982805e70fa40a6a29f20f0a6a35";
+   var requestURL ="https://api.openweathermap.org/data/2.5/weather?q="+cityName+"&appid=4409982805e70fa40a6a29f20f0a6a35";
 
    console.log(requestURL)
 
@@ -37,7 +37,7 @@ function getAPi (cityName){
        //date use moment js
        //icon
       var iconcode = weatherobj.weather[0].icon;
-       var iconurl = "http://openweathermap.org/img/w/" + iconcode + ".png";
+       var iconurl = "https://openweathermap.org/img/w/" + iconcode + ".png";
        console.log(iconurl)
        //hum
        console.log (weatherobj.main.humidity);
@@ -60,7 +60,7 @@ function getAPi (cityName){
 }
 
 function fiveDay(cityName){
-   var fiveUrl="http://api.openweathermap.org/data/2.5/forecast?q="+cityName+"&units=imperial&appid=4409982805e70fa40a6a29f20f0a6a35"
+   var fiveUrl="https://api.openweathermap.org/data/2.5/forecast?q="+cityName+"&units=imperial&appid=4409982805e70fa40a6a29f20f0a6a35"
    console.log(fiveUrl)
    fetch(fiveUrl)
    .then(function (response) {
