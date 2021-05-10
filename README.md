@@ -12,6 +12,6 @@ Enter the city you want to know the weather for and press search!
 
 
 
-    ```md
-    ![Screenshot](assets/screenshot.png)
-    ```
+    
+![](assets/screenshot.png)
+
