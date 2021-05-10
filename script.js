@@ -10,7 +10,8 @@ var arrayCity=[]
 if( localStorage.getItem ("cityName")){
    arrayCity=localStorage.getItem ("cityName");
 }
-
+var today = moment ();
+$("#today").text (today.format("MMM Do, YYYY"));
 //need to update url for cityName.. working on getApi()
 var requestURL ="https://api.openweathermap.org/data/2.5/weather?q=denver&appid=4409982805e70fa40a6a29f20f0a6a35";
 //?how can i make the city name a variable within the url?
@@ -22,8 +23,8 @@ var requestURL ="https://api.openweathermap.org/data/2.5/weather?q=denver&appid=
 //TODO: name of city needs to be saved in local storage and appear in list under search button, this needs to be a link to recall fetch
 
 function getAPi (cityName){
-   var requestURL ="https://api.openweathermap.org/data/2.5/weather?q="+cityName+"&appid=4409982805e70fa40a6a29f20f0a6a35";
-
+   var requestURL ="https://api.openweathermap.org/data/2.5/weather?q=denver&units=imperial&appid=4409982805e70fa40a6a29f20f0a6a35";
+//change back to "+ cityName +"
    console.log(requestURL)
 
  fetch(requestURL)
@@ -46,7 +47,7 @@ function getAPi (cityName){
        //uv => lon and lat =>url
        var lon=(weatherobj.coord.lon);
        var lat =(weatherobj.coord.lat);
-       var uvUrl="https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&appid=4409982805e70fa40a6a29f20f0a6a35&units=imperial"
+       var uvUrl="https://api.openweathermap.org/data/2.5/onecall?lat="+ lat +"&lon="+ lon +"&appid=4409982805e70fa40a6a29f20f0a6a35";
       console.log (uvUrl)
         fetch(uvUrl)
        .then(function (response) {
@@ -56,11 +57,16 @@ function getAPi (cityName){
          console.log(uvobj)
          console.log(uvobj.current.uvi)
       })
+
+
+
+      
     }) 
 }
 
 function fiveDay(cityName){
-   var fiveUrl="https://api.openweathermap.org/data/2.5/forecast?q="+cityName+"&units=imperial&appid=4409982805e70fa40a6a29f20f0a6a35"
+   var fiveUrl="https://api.openweathermap.org/data/2.5/forecast/?q=denver&units=imperial&appid=4409982805e70fa40a6a29f20f0a6a35";
+   //change back to "+ cityName +"
    console.log(fiveUrl)
    fetch(fiveUrl)
    .then(function (response) {
@@ -102,8 +108,16 @@ function fiveDay(cityName){
             var ptemp=document.createElement("p");
             ptemp.textContent="Temp: " + temperature5; 
 
+            var windshow=document.createElement ("p");
+            windshow.textContent ="Winds:" + wind5;
+
+            var humidshow=document.createElement ("p");
+            humidshow.textContent ="Humidity:" + humidity5;
+
             //resultBody.textContent = "Temp: " + temperature5,   + "Winds:  " + wind5, + "Humidity:  " + humidity5;
             resultBody.appendChild(ptemp);
+            resultBody.appendChild(windshow);
+            resultBody.appendChild(humidshow);
 
 
 
@@ -130,29 +144,30 @@ function fiveDay(cityName){
 
 } 
 //local storage
- function savecityname (cityName) {
-//cityName : cityName.value,
-//push the city into the array 
-arrayCity.push (cityName);
-//then set the array to ls
-localStorage.setItem ("cityName", JSON.stringify (arrayCity));
- };
+
+//  function savecityname (cityName) {
+// //cityName : cityName.value,
+// //push the city into the array 
+// arrayCity.push (cityName);
+// //then set the array to ls
+// localStorage.setItem ("cityName", JSON.stringify (arrayCity));
+//  };
  
 
-function callcityname (){
-arrayCity= JSON.parse(localStorage.getItem ("cityName"));
-for(var i=0; i<arrayCity.length;i++){
-   console.log(arrayCity[i])
-   //make them into real btns
-   var btn=document.createElement("button");
-   btn.textContent= arrayCity[i]
-   document.querySelector(".searchHistory").appendChild(btn)
-}
+// function callcityname (){
+// arrayCity= JSON.parse(localStorage.getItem ("cityName"));
+// for(var i=0; i<arrayCity.length;i++){
+//    console.log(arrayCity[i])
+//    //make them into real btns
+//    var list =document.createElement("li");
+//    list.textContent= arrayCity[i];
+//    document.querySelector(".searchHistory").appendChild(list);
+//    callcityname()
 
-}
-fiveDay ("denver")
-getAPi ("denver");
-callcityname();
+
+fiveDay ()
+getAPi ();
+;
 //  .then(data => console.log(data));}
  
 
@@ -167,16 +182,31 @@ callcityname();
     
 
 // }))
-
+// if (JSON.parse (localStorage.getItem ("arrayCity"))) { arrayCity = JSON.parse (localStorage.getItem ("arrayCity"));
+// }
 // event listners:
 //data needs to be cleared after saved to local storage so new city can be entered 
  document.querySelector(".fetchBtn").onclick = function(event){
    event.preventDefault();
     var cityName= document.querySelector("#cityName").value;
+    if (arrayCity.indexOf (cityName)=== -1)
+    {arrayCity.push(cityName);
+      localStorage.setItem("arrayCity", JSON.stringify (arrayCity));
+
+    }
     getAPi(cityName);
     fiveDay(cityName)
     savecityname (cityName);
     //set item to local storage
+   
+    for (var i = 0; i< arrayCity.length; i++) {
+var city = arrayCity [i];
+var li = document.createElement ("li");
+li.textContent = cityName;
+li.setAttribute ("data-index", i);
+cityName.appendChild (li);
+
+    }
     //get all the items
 callcityname ();
  };
