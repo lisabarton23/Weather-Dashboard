@@ -58,7 +58,8 @@ function getAPi (cityName){
          console.log(uvobj.current.uvi)
       })
 
-
+var currentbody = document.createElement ('div');
+currentbody.appendChild (iconurl);
 
       
     }) 
@@ -78,6 +79,8 @@ function fiveDay(cityName){
       //run a for 5 times => i*8 24 hrs
       for (var i = 0; i <5; i++) {
          //date momentjs moment(currentDate).formate("ll")
+         var days = moment ().format ('dddd');
+         
          // console.log(fiveObj.list[i*8].dt_txt)
          var date5 = (fiveObj.list[i*8].dt_txt)
          //icon
@@ -104,16 +107,17 @@ function fiveDay(cityName){
          
             var resultBody = document.createElement ('div');
             resultBody.appendChild(image);
-
+var showday =document.createElement ("p");
+showday.textContent = days;
             var ptemp=document.createElement("p");
-            ptemp.textContent="Temp: " + temperature5; 
+            ptemp.textContent="Temp: " + temperature5 ; 
 
             var windshow=document.createElement ("p");
-            windshow.textContent ="Winds:" + wind5;
+            windshow.textContent ="Winds:" + wind5 + "mph";
 
             var humidshow=document.createElement ("p");
             humidshow.textContent ="Humidity:" + humidity5;
-
+resultBody.appendChild (showday);
             //resultBody.textContent = "Temp: " + temperature5,   + "Winds:  " + wind5, + "Humidity:  " + humidity5;
             resultBody.appendChild(ptemp);
             resultBody.appendChild(windshow);
