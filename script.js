@@ -23,9 +23,10 @@ var requestURL ="https://api.openweathermap.org/data/2.5/weather?q=denver&appid=
 //TODO: name of city needs to be saved in local storage and appear in list under search button, this needs to be a link to recall fetch
 
 function getAPi (cityName){
-   var requestURL ="https://api.openweathermap.org/data/2.5/weather?q=denver&units=imperial&appid=4409982805e70fa40a6a29f20f0a6a35";
+   var requestURL ="https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&units=imperial&appid=4409982805e70fa40a6a29f20f0a6a35";
 //change back to "+ cityName +"
    console.log(requestURL)
+   $("#oneDay").empty();
 
  fetch(requestURL)
     .then(function (response) {
@@ -39,11 +40,37 @@ function getAPi (cityName){
        //icon
       var iconcode = weatherobj.weather[0].icon;
        var iconurl = "https://openweathermap.org/img/w/" + iconcode + ".png";
-       console.log(iconurl)
+       console.log(iconurl) 
+       var currentbody = document.createElement ('div');
+       var p1 = document.createElement ('p');
+       var img =document.createElement('img');
+       img.setAttribute("src", iconurl);
+       
+      //  <div> 
+      //    <p>
+      //        <img src=iconurl>
+      //    </p>
+      //    <p>hum</p>
+      //    <p>wind</p>
+ 
+      //  </div>
+
        //hum
        console.log (weatherobj.main.humidity);
+       var p2 =document.createElement ('p');
+       p2.textContent =weatherobj.main.humidity;
        //wind
        console.log (weatherobj.wind.speed);
+       var p3 = document.createElement ('p');
+       p3.textContent =weatherobj.wind.speed;
+
+       p1.appendChild(img);
+
+       currentbody.appendChild(p1);
+       currentbody.appendChild(p2);
+       currentbody.appendChild(p3);
+document.querySelector("#oneDay").appendChild(currentbody)
+;
        //uv => lon and lat =>url
        var lon=(weatherobj.coord.lon);
        var lat =(weatherobj.coord.lat);
@@ -56,10 +83,12 @@ function getAPi (cityName){
       .then(function(uvobj){
          console.log(uvobj)
          console.log(uvobj.current.uvi)
+         var p4 = document.createElement ('p');
+         p4.textContent = uvobj.current.uvi;
+         currentbody.appendChild(p4);
       })
 
-var currentbody = document.createElement ('div');
-currentbody.appendChild (iconurl);
+
 
       
     }) 
@@ -75,12 +104,13 @@ function fiveDay(cityName){
    })
    .then(function(fiveObj){
       console.log(fiveObj)
+      $("#fivedayBox").empty();
 
       //run a for 5 times => i*8 24 hrs
       for (var i = 0; i <5; i++) {
          //date momentjs moment(currentDate).formate("ll")
-         var days = moment ().format ('dddd');
-         
+        var days = moment ().format ('dddd');
+        //need to move days forward by i++ in a function?
          // console.log(fiveObj.list[i*8].dt_txt)
          var date5 = (fiveObj.list[i*8].dt_txt)
          //icon
@@ -100,24 +130,20 @@ function fiveDay(cityName){
          //hum
          // console.log (fiveObj.list[i*8].main.humidity)
          var humidity5 = (fiveObj.list[i*8].main.humidity)
-         
         // function showResults (resultObj) {
             var resultIcon = document.createElement ('div');
             resultIcon.classList.add ('card',);
-         
             var resultBody = document.createElement ('div');
             resultBody.appendChild(image);
-var showday =document.createElement ("p");
-showday.textContent = days;
+         var showday =document.createElement ("p");
+         showday.textContent = days;
             var ptemp=document.createElement("p");
             ptemp.textContent="Temp: " + temperature5 ; 
-
             var windshow=document.createElement ("p");
             windshow.textContent ="Winds:" + wind5 + "mph";
-
             var humidshow=document.createElement ("p");
             humidshow.textContent ="Humidity:" + humidity5;
-resultBody.appendChild (showday);
+            resultBody.appendChild (showday);
             //resultBody.textContent = "Temp: " + temperature5,   + "Winds:  " + wind5, + "Humidity:  " + humidity5;
             resultBody.appendChild(ptemp);
             resultBody.appendChild(windshow);
@@ -128,7 +154,7 @@ resultBody.appendChild (showday);
 
 
 
-             weatherfive.appendChild(resultBody);
+             document.querySelector("#fivedayBox").appendChild(resultBody);
         
 
              console.log("fivedaydone");
@@ -169,21 +195,8 @@ resultBody.appendChild (showday);
 //    callcityname()
 
 
-fiveDay ()
-getAPi ();
-;
-//  .then(data => console.log(data));}
- 
-
-//   .then (function (data) {console.log (data)})
-//    for (var i = 0; i < data.length; i++) {
-//       //Creating elements, cardrow, carddata, 
-//    var createcard = document.createElement('ul');        
-//        createcard.textContent = data[i].main;
-//     // cardData.appendChild(link);
-//        createcardRow.appendChild(cardData);
-    //    cardBody.appendChild(createcardRow);}
-    
+fiveDay ("denver")
+getAPi ("denver");
 
 // }))
 // if (JSON.parse (localStorage.getItem ("arrayCity"))) { arrayCity = JSON.parse (localStorage.getItem ("arrayCity"));
@@ -193,29 +206,25 @@ getAPi ();
  document.querySelector(".fetchBtn").onclick = function(event){
    event.preventDefault();
     var cityName= document.querySelector("#cityName").value;
-    if (arrayCity.indexOf (cityName)=== -1)
-    {arrayCity.push(cityName);
-      localStorage.setItem("arrayCity", JSON.stringify (arrayCity));
+    console.log(cityName)
+    //i need to be able to call cityName with this value into the global scope
+   arrayCity.push(cityName);
+   localStorage.setItem("arrayCity", JSON.stringify (arrayCity));
 
-    }
+    
     getAPi(cityName);
     fiveDay(cityName)
-    savecityname (cityName);
-    //set item to local storage
-   
+
+   $("#weatherBox").empty();
     for (var i = 0; i< arrayCity.length; i++) {
-var city = arrayCity [i];
-var li = document.createElement ("li");
-li.textContent = cityName;
-li.setAttribute ("data-index", i);
-cityName.appendChild (li);
+      var city = arrayCity [i];
+      var li = document.createElement ("li");
+      li.textContent =arrayCity[i];
+      li.setAttribute ("data-index", i);
+      weatherShow.appendChild (li);}
+     }
 
-    }
-    //get all the items
-callcityname ();
- };
-
-
+ 
    
 //city name needs to be added to local storage and ul with link?
 //https://openweathermap.org/img/w/$%7Bdata.weather[0].icon%7D.png
