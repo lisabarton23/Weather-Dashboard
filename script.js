@@ -45,7 +45,9 @@ function getAPi (cityName){
        var p1 = document.createElement ('p');
        var img =document.createElement('img');
        img.setAttribute("src", iconurl);
-       
+       console.log (weatherobj.main.temp);
+       var p5 = document.createElement ('p');
+       p5.textContent ="Temp: " + weatherobj.main.temp;
       //  <div> 
       //    <p>
       //        <img src=iconurl>
@@ -58,18 +60,20 @@ function getAPi (cityName){
        //hum
        console.log (weatherobj.main.humidity);
        var p2 =document.createElement ('p');
-       p2.textContent =weatherobj.main.humidity;
+       p2.textContent ="Humidity: " + weatherobj.main.humidity;
        //wind
        console.log (weatherobj.wind.speed);
        var p3 = document.createElement ('p');
-       p3.textContent =weatherobj.wind.speed;
+       p3.textContent = "Winds: " + weatherobj.wind.speed + "mph";
 
        p1.appendChild(img);
-
+      
        currentbody.appendChild(p1);
+       currentbody.appendChild(p5);
+
        currentbody.appendChild(p2);
        currentbody.appendChild(p3);
-document.querySelector("#oneDay").appendChild(currentbody)
+   document.querySelector("#oneDay").appendChild(currentbody)
 ;
        //uv => lon and lat =>url
        var lon=(weatherobj.coord.lon);
@@ -84,7 +88,7 @@ document.querySelector("#oneDay").appendChild(currentbody)
          console.log(uvobj)
          console.log(uvobj.current.uvi)
          var p4 = document.createElement ('p');
-         p4.textContent = uvobj.current.uvi;
+         p4.textContent ="UV: " + uvobj.current.uvi;
          currentbody.appendChild(p4);
       })
 
@@ -95,7 +99,7 @@ document.querySelector("#oneDay").appendChild(currentbody)
 }
 
 function fiveDay(cityName){
-   var fiveUrl="https://api.openweathermap.org/data/2.5/forecast/?q=denver&units=imperial&appid=4409982805e70fa40a6a29f20f0a6a35";
+   var fiveUrl="https://api.openweathermap.org/data/2.5/forecast/?q=" + cityName + "&units=imperial&appid=4409982805e70fa40a6a29f20f0a6a35";
    //change back to "+ cityName +"
    console.log(fiveUrl)
    fetch(fiveUrl)
